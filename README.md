@@ -11,6 +11,11 @@
     - Salvar o resultado em cache
     - Retornar o fluxo de requisição para o backend salvar os dados no elastic search
 
+
+## Arquitetura
+
+![Arquitetura da Aplicação](docs/arquitetura_crawler.jpg)
+
 ## Backend
 
 O backend da solução está descrito no repositório abaixo

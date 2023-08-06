@@ -36,7 +36,12 @@ export class ExtratoPageService {
         await frame.waitForTimeout(2000);
         await frame.click("ion-card ion-grid ion-row:nth-child(1) ion-col:nth-child(2) ion-button");
 
-        return frame;
+        const response = {
+            "docnumber" : docnumber,
+            "benefits" : []
+        }
+        
+        return response;
 
     }
 }

@@ -3,11 +3,16 @@
 import puppeteer from "puppeteer";
 import { HomePageService } from "./homepage.service";
 import { ExtratoPageService } from "./extratopage.service";
+import { BackendUtils } from "../utils/backend.utils";
 
 const SITE_URL = process.env.SITE_URL || "";
 const CRAWLER_HEADLESS = process.env.CRAWLER_HEADLESS;
 
 export class CrawlerService {
+
+    private static async sendToBackend( payload : any ){
+        await BackendUtils.sendDataToElasticSearch(payload);
+    }
 
     public static async initCrawler( docnumber : string){
 
@@ -26,9 +31,14 @@ export class CrawlerService {
         await frame.waitForTimeout(10000);
         
         await ExtratoPageService.closeModal(frame);
-        await ExtratoPageService.findByDocnumber(frame, docnumber);
+        const benefitsResponse = await ExtratoPageService.findByDocnumber(frame, docnumber);
 
-        
+        // close browser
+        console.log("fechando o browser");
+        await browser.close();
 
+        // send data to elastic search
+        console.log("Enviando os dados para o backend - elastic search");
+        CrawlerService.sendToBackend( benefitsResponse );
     }
 }

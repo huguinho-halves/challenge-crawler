@@ -10,7 +10,7 @@ export class WorkerUtils {
 
         // verifica no redis
         // instância o crawler
-        // CrawlerService.initCrawler( docnumber );
+        CrawlerService.initCrawler( docnumber );
 
     }
 }

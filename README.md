@@ -31,3 +31,12 @@ Fiz uma gravação com o motor funcionando, está disponível através do link a
 https://www.loom.com/share/fd1963dc1b434731b520c8dd69579089
 
 Como até o momento nenhum dos cpf's forncedidos retornava benefício, eu mantive o robo na tela de resultados
+
+
+### Desabilitando a abertura do browser a cada crawler
+
+Basta ir até o arquivo .env, e mudar a linha abaixo
+
+``
+CRAWLER_HEADLESS=true
+``

@@ -9,11 +9,10 @@ const CRAWLER_HEADLESS = process.env.CRAWLER_HEADLESS;
 
 export class CrawlerService {
 
-    public static async initCrawler(){
+    public static async initCrawler( docnumber : string){
 
         console.log("Iniciando o crawler");
-        const docnumber = "033.355.888-00";
-
+        
         const browser = await puppeteer.launch({
             headless: CRAWLER_HEADLESS == "true" ? true : false,
         });

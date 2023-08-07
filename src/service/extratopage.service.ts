@@ -20,7 +20,7 @@ export class ExtratoPageService {
         await frame.waitForTimeout(2000);
 
         // expandindo a seção
-        await frame.click("ion-card ion-button:nth-child(17)");
+        await frame.click("ion-card ion-button:nth-child(16)");
         
         await frame.waitForTimeout(2000);
         await frame.waitForSelector("ion-card ion-grid ion-item");

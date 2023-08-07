@@ -19,7 +19,7 @@ export class BackendUtils {
         
         await axios.request(config);
 
-        console.log("dados enviados com sucesso para o elastic search");
+        console.log("Dados enviados com sucesso para o elastic search");
 
     }
 }

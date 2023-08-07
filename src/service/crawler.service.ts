@@ -4,6 +4,7 @@ import puppeteer from "puppeteer";
 import { HomePageService } from "./homepage.service";
 import { ExtratoPageService } from "./extratopage.service";
 import { BackendUtils } from "../utils/backend.utils";
+import { RedisUtils } from "../utils/redis.utils";
 
 const SITE_URL = process.env.SITE_URL || "";
 const CRAWLER_HEADLESS = process.env.CRAWLER_HEADLESS;
@@ -23,22 +24,40 @@ export class CrawlerService {
         });
         const page = await browser.newPage();
     
-        await page.goto(SITE_URL);
+        try{
+            await page.goto(SITE_URL);
 
-        const frame = await HomePageService.authenticate(page);
+            const frame = await HomePageService.authenticate(page);
 
-        console.log("Aguardando navegação por 10 segundos");
-        await frame.waitForTimeout(10000);
+            console.log("Aguardando navegação por 10 segundos");
+            await frame.waitForTimeout(10000);
+            
+            await ExtratoPageService.closeModal(frame);
+            const benefitsResponse = await ExtratoPageService.findByDocnumber(frame, docnumber);
+
+            // close browser
+            console.log("fechando o browser");
+            
+
+            try{
+                // send data to elastic search
+                console.log("Enviando os dados para o backend - elastic search");
+                CrawlerService.sendToBackend( benefitsResponse );
+
+                console.log("Enviando os dados para o redis");
+                await RedisUtils.setRecord( benefitsResponse.docnumber, benefitsResponse );
+            }
+            catch(e){
+                console.log(e);
+            }
+        }
+        catch(e){
+            throw e;
+        }
+        finally{
+            await browser.close();
+        }
         
-        await ExtratoPageService.closeModal(frame);
-        const benefitsResponse = await ExtratoPageService.findByDocnumber(frame, docnumber);
-
-        // close browser
-        console.log("fechando o browser");
-        await browser.close();
-
-        // send data to elastic search
-        console.log("Enviando os dados para o backend - elastic search");
-        CrawlerService.sendToBackend( benefitsResponse );
+        
     }
 }
